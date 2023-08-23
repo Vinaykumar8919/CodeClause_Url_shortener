@@ -1,35 +1,82 @@
-# CodeClause_Url_shortener
-1. Import necessary libraries:
-   - `Flask`: A web framework for Python used to create web applications.
-   - `string` and `random`: These standard Python libraries are used to generate random alphanumeric codes for the shortened URLs.
+# URL Shortener Application
 
-2. Create a Flask application instance:
-   - The `Flask` class is used to create an instance of the web application. It is assigned to the variable `app`.
+This is a simple Flask application that provides URL shortening functionality. The application allows users to input a long URL, and it generates a short code that redirects to the original URL when accessed. The short URL is constructed based on the base URL of the application.
 
-3. Set the base URL:
-   - `app.config['BASE_URL']` is set to the base URL of the application. In this example, it is set to `'http://localhost:5000/'`. This will be used to construct the shortened URLs.
+## Prerequisites
 
-4. Define a function to generate a short code:
-   - `generate_short_code()` is a function that generates a random alphanumeric code of length 6 using `string.ascii_letters` (lowercase and uppercase letters) and `string.digits` (digits 0-9).
+Before running the application, make sure you have the following installed:
 
-5. Create two routes using the `@app.route` decorator:
-   - `'/'`: The home route, used to handle both GET and POST requests.
-   - `'/<short_code>'`: A dynamic route that accepts a short code as part of the URL.
+- Python
+- Flask
+- MySQL server
+- `mysql-connector-python` package
+- `validators` package
 
-6. Define the `home()` function for the '/' route:
-   - For POST requests, the function receives the original URL from the submitted form data.
-   - It calls `generate_short_code()` to create a short code for the URL and constructs the short URL using the base URL and the generated short code.
-   - The original URL and the short code are stored in the `url_db` dictionary, which acts as a simple in-memory database to store the shortened URLs.
-   - The function renders the 'index.html' template and passes the short URL to be displayed on the page.
-   - For GET requests, it simply renders the 'index.html' template without any short URL.
+## Installation and Setup
 
-7. Define the `redirect_to_url()` function for the '/<short_code>' route:
-   - When a user accesses a shortened URL like 'http://localhost:5000/abc123', the function receives 'abc123' as the `short_code` parameter.
-   - If the `short_code` exists in the `url_db` dictionary, it means a valid short URL was provided, and the user is redirected to the original URL associated with that short code using the `redirect()` function.
-   - If the `short_code` doesn't exist in the `url_db`, the function returns 'Invalid URL'.
+1. Clone the repository or download the source code:
 
-8. Run the application:
-   - The `if __name__ == '__main__':` block ensures that the application is run only when executed directly (not when imported as a module).
-   - The application is started using `app.run(debug=True)`, which runs the Flask development server with debug mode enabled.
+   ```bash
+   git clone <repository_url>
+   ```
 
-To use this URL shortener, run the Python script, and it will start the Flask development server on `http://localhost:5000/`. Visit this URL in your web browser, and you'll see a form to submit a long URL. Upon submitting the form, the application will generate a shortened URL, which you can use to access the original URL. For example, entering `http://www.example.com` in the form might generate a short URL like `http://localhost:5000/abc123`, and accessing the short URL will redirect you to `http://www.example.com`.
+2. Install the required packages using pip:
+
+   ```bash
+   pip install Flask mysql-connector-python validators
+   ```
+
+3. Set up the MySQL database:
+
+   - Create a database named 'url'.
+   - Update the `user` and `password` values in the code to match your MySQL configuration.
+
+4. Run the Application:
+
+   Navigate to the project directory and run the following command:
+
+   ```bash
+   python app.py
+   ```
+
+   The application will start, and you should see output indicating that the server is running.
+
+5. Access the Application:
+
+   Open a web browser and navigate to `http://localhost:5000/` to access the URL shortener application.
+
+## How the Application Works
+
+1. **Homepage:**
+
+   When you access the root URL (`http://localhost:5000/`), you'll see a form where you can input a long URL.
+
+2. **Shortening a URL:**
+
+   - Enter a long URL in the input field and submit the form.
+   - The application validates the URL using the `validators` package.
+   - If the URL is valid, a short code is generated using the `generate_short_code` function.
+   - The short URL is constructed using the base URL and the generated short code.
+   - The original URL, short code, and short URL are stored in the MySQL database.
+
+3. **Accessing a Shortened URL:**
+
+   - When you access a short URL (e.g., `http://localhost:5000/<short_code>`), the application retrieves the original URL associated with the short code from the database.
+   - If the short code is found, the application redirects you to the original URL.
+   - If the short code is not found, you'll see an "Invalid URL" message.
+
+## Customization
+
+- You can customize the base URL by modifying the `BASE_URL` configuration in the code.
+- The length of the generated short code can be adjusted by changing the value in the `generate_short_code` function.
+
+## Error Handling
+
+- The application handles errors related to MySQL database connections and data insertion.
+- Invalid URLs are detected using the `validators` package.
+
+## Note
+
+- This code is for educational purposes and may require additional security and optimization for production use.
+
+Feel free to modify, enhance, and deploy this application as needed for your specific use case.
