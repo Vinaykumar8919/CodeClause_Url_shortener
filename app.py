@@ -6,7 +6,7 @@ from mysql.connector import Error
 from validators import url as validate_url
 
 app = Flask(__name__)
-app.config['BASE_URL'] = 'http://localhost:5000/'
+app.config['BASE_URL'] = 'http://192.168.26.22:5000/'
 
 try:
     mydb = mysql.connector.connect(
@@ -62,4 +62,4 @@ def redirect_to_url(short_code):
         return "An error occurred"
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='192.168.26.22', port=5000)
